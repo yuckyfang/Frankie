@@ -127,11 +127,11 @@ def query_api(term, location):
 
 
 
-def main():
+def main(input_term):
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-q', '--term', dest='term', default=TERM,
+    parser.add_argument('-q', '--term', dest='term', default=input_term,
 
                         type=str, help='Search term (default: %(default)s)')
 
@@ -172,25 +172,27 @@ emojis_list = [":pizza:",":ice_cream:", ":sushi:", ":spaghetti:", ":french_fries
 new_list = []
 for i in emojis_list:
     new_list.append(emoji.emojize(i))
-
 print(new_list)         
 sentence = input()
 print("Hi there!")
-sentence = input(random.choice(MAIN_QS) + str(random.sample(new_list, 3)))
+
+def ask_for_emoji():
+    sentence = input(random.choice(MAIN_QS) + str(random.sample(new_list, 3)))
     
+    if sentence in emoji.UNICODE_EMOJI:
+    
+        emoji_input = str(sentence)
         
-emoji_input = str(sentence)
+        #gets text of emoji
+        text = UNICODE_EMOJI[emoji_input]
+        
+        #saves text without colons
+        TERM = text[1:len(text)-1]
+    
+        main(TERM)
+        
+    else:
+        print("Sorry, I only accept emojis" + ' ' + emoji.emojize(':crying_face:'))
+        ask_for_emoji()
 
-#gets unicode of emoji
-unicode = 'U+{:X}'.format(ord(emoji_input))
-
-#gets text of emoji
-text = UNICODE_EMOJI[emoji_input]
-
-#saves text without colons
-TERM = text[1:len(text)-1]
-
-main()
-
-
-
+ask_for_emoji()
