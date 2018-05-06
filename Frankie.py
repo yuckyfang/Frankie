@@ -28,7 +28,6 @@ API_KEY= "yNvU5hJ2u4gBpIzmdeKzClCz0vizVcSu5_H9PbbhAz5ExSghk793K8pOCDlhG7kfK0LbRG
 API_HOST = 'https://api.yelp.com'
 SEARCH_PATH = '/v3/businesses/search'
 BUSINESS_PATH = '/v3/businesses/'  # Business ID will come after slash.
-DEFAULT_LOCATION = 'New York City, NY'
 SEARCH_LIMIT = 3
 
 
@@ -127,7 +126,7 @@ def query_api(term, location):
 
 
 
-def main(input_term):
+def main(input_term, input_location):
 
     parser = argparse.ArgumentParser()
 
@@ -137,7 +136,7 @@ def main(input_term):
 
     parser.add_argument('-l', '--location', dest='location',
 
-                        default=DEFAULT_LOCATION, type=str,
+                        default=input_location, type=str,
 
                         help='Search location (default: %(default)s)')
 
@@ -188,11 +187,26 @@ def ask_for_emoji():
         
         #saves text without colons
         TERM = text[1:len(text)-1]
-    
-        main(TERM)
+        
+        LOCATION = input("location?")
+        if LOCATION.lower() == "near me" or "current location": 
+            import geocoder
+            g = geocoder.ip('me')
+            #print(g.latlng)
+            #g.address returns city and state 
+            main(TERM, g.address)
+        else: 
+            main(TERM, LOCATION)
         
     else:
         print("Sorry, I only accept emojis" + ' ' + emoji.emojize(':crying_face:'))
         ask_for_emoji()
 
 ask_for_emoji()
+
+'''emoji chart 
+https://unicode.org/emoji/charts/full-emoji-list.html '''
+
+'''import geocoder
+g = geocoder.ip('me')
+print(g.latlng)'''
