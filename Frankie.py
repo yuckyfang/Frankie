@@ -105,23 +105,31 @@ def query_api(term, location):
 
 
 
-    business_id = businesses[0]['id']
+    business_id1 = businesses[0]['id']
+    business_id2 = businesses[1]['id']
+    business_id3 = businesses[2]['id']
+
+
+    response = get_business(API_KEY, business_id1)
+    response2 = get_business(API_KEY, business_id2)
+    response3 = get_business(API_KEY, business_id3)
 
 
 
-    print(u'{0} businesses found, querying business info ' \
 
-        'for the top result "{1}" ...'.format(
+    print(u'Result for business "{0}" found:'.format(business_id1))
+    print(u'Result for business "{0}" found:'.format(business_id2))
+    print(u'Result for business "{0}" found:'.format(business_id3))
 
-            len(businesses), business_id))
-
-    response = get_business(API_KEY, business_id)
-
-
-
-    print(u'Result for business "{0}" found:'.format(business_id))
 
     pprint.pprint(response, indent=2)
+    print('')
+    pprint.pprint(response2, indent=2)
+    print('')
+    pprint.pprint(response3, indent=2)
+
+    
+    
 
 
 
@@ -189,15 +197,13 @@ def ask_for_emoji():
         TERM = text[1:len(text)-1]
         
         LOCATION = input("location?")
-        if LOCATION.lower() == "near me" or "current location": 
+        if LOCATION.lower() == "near me" or LOCATION.lower() == "current location": 
             import geocoder
             g = geocoder.ip('me')
-            #print(g.latlng)
-            #g.address returns city and state 
             main(TERM, g.address)
         else: 
             main(TERM, LOCATION)
-        
+            
     else:
         print("Sorry, I only accept emojis" + ' ' + emoji.emojize(':crying_face:'))
         ask_for_emoji()
