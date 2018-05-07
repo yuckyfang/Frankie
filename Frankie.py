@@ -5,17 +5,10 @@ from random import choices
 import emoji 
 from emoji.unicode_codes import UNICODE_EMOJI
 import argparse, json, pprint, requests, sys, urllib
+from urllib.error import HTTPError
+from urllib.parse import quote
+from urllib.parse import urlencode
 
-try:
-    from urllib.error import HTTPError
-    from urllib.parse import quote
-    from urllib.parse import urlencode
-except ImportError:
-    # Fall back to Python 2's urllib2 and urllib
-    from urllib2 import HTTPError
-    from urllib import quote
-    from urllib import urlencode
-    
 
 SEARCH_LIMIT = 3
 
@@ -57,45 +50,34 @@ def get_business(api_key, business_id):
 
 #Queries the API by the input values from the user.
 def query_api(term, location):
-    response = search(API_KEY, term, location)
-    businesses = response.get('businesses')
-    if not businesses:
-        print(u'No businesses for {0} in {1} found.'.format(term, location))
-        ask_for_emoji()
-    business_id1 = businesses[0]['id']
-    business_id2 = businesses[1]['id']
-    business_id3 = businesses[2]['id']
-    response = get_business(API_KEY, business_id1)
-    response2 = get_business(API_KEY, business_id2)
-    response3 = get_business(API_KEY, business_id3)
-    print(u'Result for business "{0}" found:'.format(businesses[0]['name']))
-    print(u'Result for business "{0}" found:'.format(businesses[1]['name']))
-    print(u'Result for business "{0}" found:'.format(businesses[2]['name']))
-    pprint.pprint(response, indent=2)
-    print('')
-    pprint.pprint(response2, indent=2)
-    print('')
-    pprint.pprint(response3, indent=2)
-
-
-def main(input_term, input_location):
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-q', '--term', dest='term', default=input_term,
-                        type=str, help='Search term (default: %(default)s)')
-    parser.add_argument('-l', '--location', dest='location',
-                        default=input_location, type=str,
-                        help='Search location (default: %(default)s)')
-    input_values = parser.parse_args()
-    try:
-        query_api(input_values.term, input_values.location)
+    try: 
+        response = search(API_KEY, term, location)
+        businesses = response.get('businesses')
+        if not businesses:
+            print(u'No businesses for {0} in {1} found.'.format(term, location))
+            ask_for_emoji()
+        business_id1 = businesses[0]['id']
+        business_id2 = businesses[1]['id']
+        business_id3 = businesses[2]['id']
+        response = get_business(API_KEY, business_id1)
+        response2 = get_business(API_KEY, business_id2)
+        response3 = get_business(API_KEY, business_id3)
+        print(u'Result for business "{0}" found:'.format(businesses[0]['name']))
+        print(u'Result for business "{0}" found:'.format(businesses[1]['name']))
+        print(u'Result for business "{0}" found:'.format(businesses[2]['name']))
+        pprint.pprint(response, indent=2)
+        print('')
+        pprint.pprint(response2, indent=2)
+        print('')
+        pprint.pprint(response3, indent=2)
     except HTTPError as error:
         sys.exit(
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(
                 error.code,
                 error.url,
                 error.read(),
+                )
             )
-        )
         
         
 MAIN_QS = ["What do you fancy today?", "What food are you feeling?"]
