@@ -17,13 +17,16 @@ except ImportError:
     from urllib import urlencode
     
 
-API_KEY= "yNvU5hJ2u4gBpIzmdeKzClCz0vizVcSu5_H9PbbhAz5ExSghk793K8pOCDlhG7kfK0LbRGWMm1G2GMUmTxJD2aFt8PWOB3C6KyFC02eYWDr7p-BvN7Bygwj7TGvuWnYx"
-API_HOST = 'https://api.yelp.com'
-SEARCH_PATH = '/v3/businesses/search'
-BUSINESS_PATH = '/v3/businesses/'  # Business ID will come after slash.
 SEARCH_LIMIT = 3
 
-
+with open("config.json", "r") as f:
+    data = json.load(f)
+API_KEY = data['api_key']
+API_HOST = data["API_HOST"]
+SEARCH_PATH = data["SEARCH_PATH"]
+BUSINESS_PATH = data["BUSINESS_PATH"]
+    
+    
 def request(host, path, api_key, url_params=None):
     url_params = url_params or {}
     url = '{0}{1}'.format(host, quote(path.encode('utf8')))
