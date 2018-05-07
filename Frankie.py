@@ -56,12 +56,10 @@ def query_api(term, location):
         if not businesses:
             print(u'No businesses for {0} in {1} found.'.format(term, location))
             ask_for_emoji()
-        business_id1 = businesses[0]['id']
-        business_id2 = businesses[1]['id']
-        business_id3 = businesses[2]['id']
-        response = get_business(API_KEY, business_id1)
-        response2 = get_business(API_KEY, business_id2)
-        response3 = get_business(API_KEY, business_id3)
+         
+        response = get_business(API_KEY, businesses[0]['id'])
+        response2 = get_business(API_KEY, businesses[1]['id'])
+        response3 = get_business(API_KEY, businesses[2]['id'])
         print(u'Result for business "{0}" found:'.format(businesses[0]['name']))
         print(u'Result for business "{0}" found:'.format(businesses[1]['name']))
         print(u'Result for business "{0}" found:'.format(businesses[2]['name']))
@@ -80,17 +78,16 @@ def query_api(term, location):
             )
         
         
-MAIN_QS = ["What do you fancy today?", "What food are you feeling?"]
-emojis_list = [":pizza:",":ice_cream:", ":sushi:", ":spaghetti:", ":sake:", ":french_fries:", ":curry_rice:", ":doughnut:", ":Vietnam:", ":United_States:", ":Italy:", ":China:", ":United_Kingdom:", ":Chile:", ":Egypt:"]
-new_list = []
-for i in emojis_list:
-    new_list.append(emoji.emojize(i))
-print(new_list)         
-sentence = input()
-print("Hi there!")
-
 
 def ask_for_emoji():
+    MAIN_QS = ["What do you fancy today?", "What food are you feeling?"]
+    emojis_list = [":pizza:",":ice_cream:", ":sushi:", ":spaghetti:", ":sake:", ":french_fries:", ":curry_rice:", ":doughnut:", ":Vietnam:", ":United_States:", ":Italy:", ":China:", ":United_Kingdom:", ":Chile:", ":Egypt:"]
+    new_list = []
+    for i in emojis_list:
+        new_list.append(emoji.emojize(i))
+    print(new_list)         
+    sentence = input()
+    print("Hi there!")
     sentence = input(random.choice(MAIN_QS) + str(random.sample(new_list, 3)))
     
     if sentence in emoji.UNICODE_EMOJI:
@@ -105,9 +102,9 @@ def ask_for_emoji():
             import geocoder
             g = geocoder.ip('me')
             #only finds your city and state...try latlng
-            main(TERM, g.address)
+            query_api(TERM, g.address)
         else: 
-            main(TERM, LOCATION)       
+            query_api(TERM, LOCATION)       
     else:
         print("Sorry, I only accept emojis" + ' ' + emoji.emojize(':crying_face:'))
         ask_for_emoji()
