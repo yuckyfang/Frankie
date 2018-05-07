@@ -31,11 +31,12 @@ def request(host, path, api_key, url_params=None):
     return response.json()
 
 
-def search(api_key, term, location):
+def search(api_key, term, latitude, longitude):
     #Query the Search API by a search term and location.
     url_params = {
         'term': term.replace(' ', '+'),
-        'location': location.replace(' ', '+'),
+        'latitude': latitude, 
+        'longitude': longitude, 
         'limit': SEARCH_LIMIT
 
     }
@@ -49,9 +50,9 @@ def get_business(api_key, business_id):
 
 
 #Queries the API by the input values from the user.
-def query_api(term, location):
+def query_api(term,latitude, longitude):
     try: 
-        response = search(API_KEY, term, location)
+        response = search(API_KEY, term, latitude, longitude)
         businesses = response.get('businesses')
         if not businesses:
             print(u'No businesses for {0} in {1} found.'.format(term, location))
@@ -102,7 +103,7 @@ def ask_for_emoji():
             import geocoder
             g = geocoder.ip('me')
             #only finds your city and state...try latlng
-            query_api(TERM, g.address)
+            query_api(TERM,g.latlng[0], g.latlng[1])
         else: 
             query_api(TERM, LOCATION)       
     else:
