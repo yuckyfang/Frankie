@@ -54,6 +54,6 @@ print('average ' + str(average))
 #prints summary 
 summary = ''
 for sentence in sentences:
-    if sentence in sentenceValue and sentenceValue[sentence] > (average): #prints sentence if above average 
+    if sentence in sentenceValue and sentenceValue[sentence] > (1.5*average): #prints sentence if above average 
         summary +=  " " + sentence
 print(summary)
