@@ -2,23 +2,26 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 
 #sample text 
-text = '''Is pricing power gone? 2018 has been a perfect storm for Big Food. Sales growth is stalling while oil, freight  
-raw material, steel and aluminum costs rise.  In the past, inflation wouldnt have been a major issue for these legacy brands. 
-Their size, supply chain, and enormous TV advertising budgets allowed them to muscle out competitors and maintain higher prices.
-You didnt have tons of competition, and the superior economics just continued, Brennan said. It was a pretty nice gig.
-But they dont have that luxury anymore. Their business models and pricing power are crumbling as the retail and grocery 
-industries consolidate, consumer allegiances fade, and low-budget digital advertising campaigns sway shoppers. 
-Walmart (WMT), Amazon (AMZN), Target (TGT), and Kroger (KR) are waging a price war that has spread to the rest of the retail 
-and grocery industry. The pricing battle has changed shoppers expectations of how much a box of cereal or a bar of soap costs.
-If suppliers dont play ball on prices, Walmart can put products in the back of the store where shoppers cant find them. 
-Amazon can send them to the bottom of its search pages. '''
+text = '''Data science is an interdisciplinary field of scientific methods, processes, algorithms and systems to extract knowledge 
+or insights from data in various forms, either structured or unstructured, similar to data mining.
+Data science is a "concept to unify statistics, data analysis, machine learning and their related methods" in order to
+"understand and analyze actual phenomena" with data.It employs techniques and theories drawn from many fields within 
+the broad areas of mathematics, statistics, information science, and computer science.
+Turing award winner Jim Gray imagined data science as a "fourth paradigm" of science (empirical, theoretical, computational 
+and now data-driven) and asserted that "everything about science is changing because of the impact of information technology" 
+and the data deluge. When Harvard Business Review called it "The Sexiest Job of the 21st Century" the term became 
+a buzzword, and is now often applied to business analytics,business intelligence, predictive modeling, any arbitrary use 
+of data, or used as a sexed-up term for statistics. In many cases, earlier approaches and solutions are now simply 
+rebranded as "data science" to be more attractive, which can cause the term to "dilute beyond usefulness." While many 
+university programs now offer a data science degree, there exists no consensus on a definition or curriculum contents.
+Because of the current popularity of this term, there are many "advocacy efforts" surrounding it.'''
 print(text)
 
 #nltk.download('stopwords')
 #nltk.download('punkt')
 
 #stopwords do not add value to the meaning of a sentence eg the, a, of...
-stopWords = set(stopwords.words("english")) #store predefined stopwords from nltk 
+stopWords = set(stopwords.words("english")) #stores predefined stopwords from nltk 
 words = word_tokenize(text) #separate every word in the text and store in array
 
 #stores frequency of each word
@@ -49,11 +52,11 @@ sumValues = 0
 for sentence in sentenceValue:
     sumValues += sentenceValue[sentence] #sum of each every sentence value 
 average = int(sumValues/ len(sentenceValue)) # Average value of a sentence from original text
-print('average ' + str(average))
+#print('average ' + str(average))
 
 #prints summary 
 summary = ''
 for sentence in sentences:
-    if sentence in sentenceValue and sentenceValue[sentence] > (1.5*average): #prints sentence if above average 
+    if sentence in sentenceValue and sentenceValue[sentence] > (average): #prints sentence if above average 
         summary +=  " " + sentence
 print(summary)
