@@ -17,7 +17,7 @@ with open("config.json", "r") as f:
     data = json.load(f)
 API_KEY = data['api_key']
 API_HOST = data["API_HOST"]
-API_HOST_REVIEWS = data["API_HOST_REVIEWS"]
+REVIEWS_PATH = data["REVIEWS_PATH"]
 SEARCH_PATH = data["SEARCH_PATH"]
 BUSINESS_PATH = data["BUSINESS_PATH"]
     
@@ -28,11 +28,23 @@ def request(host, path, api_key, url_params=None):
     headers = {
         'Authorization': 'Bearer %s' % api_key,
     }
-
-    response = requests.request('GET', url, headers=headers, params=url_params)    
+    
+    #need the following parameters (type dict) 
+#     params = {'name':'MinuteClinic', 'address1':'241 West 57th St', 'city':'New York', 'state':'NY', 'country':'US'}
+#     param_string = urllib.parse.urlencode(params)
+#     res = requests.request("GET", url, headers=headers, params = url_params)
+#     data = res.json()
+#     print(data)
+#     
+#     b_id = data['businesses'][0]['id'] 
+#     r_url = "/v3/businesses/" + b_id + "/reviews"    #review request URL creation based on business ID
+#     reviews = requests.request("GET",r_url,headers=headers, params = url_params)
+#     print(reviews.json())
+#     
+    response = requests.request('GET', url, headers=headers, params=url_params)   
     return response.json()
 
-
+    
 def search(api_key, term, latitude, longitude, location=None):
     #Query the Search API by a search term and location.
     if location is None:
@@ -50,6 +62,7 @@ def search(api_key, term, latitude, longitude, location=None):
             'limit': SEARCH_LIMIT
     
         }
+    
     return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
 
 
@@ -57,6 +70,11 @@ def get_business(api_key, business_id):
     #Query the Business API by a business ID.
     business_path = BUSINESS_PATH + business_id
     return request(API_HOST, business_path, api_key)
+
+
+def get_review(api_key, business_id):
+    review_path = BUSINESS_PATH + business_id + REVIEWS_PATH
+    return request(API_HOST, review_path, api_key)
 
 
 #Queries the API by the input values from the user.
@@ -83,18 +101,40 @@ def query_api(term,latitude, longitude, location=None):
         print(response['phone'])
         pprint.pprint(response['location']['display_address'])
         print(str(response['rating']) + ' stars')
+        #prints 3 reviews of each business 
+        review = get_review(API_KEY, businesses[0]['id'])
+        pprint.pprint(review['reviews'][0]['rating'])
+        pprint.pprint(review['reviews'][0]['text'])
+        pprint.pprint(review['reviews'][1]['rating'])
+        pprint.pprint(review['reviews'][1]['text'])
+        pprint.pprint(review['reviews'][2]['rating'])
+        pprint.pprint(review['reviews'][2]['text'])
         pprint.pprint(response['hours'])
         print('')
         print(response2['name'])
         print(response2['phone'])
         pprint.pprint(response2['location']['display_address'])
         print(str(response2['rating']) + ' stars')
+        review2 = get_review(API_KEY, businesses[1]['id'])
+        pprint.pprint(review2['reviews'][0]['rating'])
+        pprint.pprint(review2['reviews'][0]['text'])
+        pprint.pprint(review2['reviews'][1]['rating'])
+        pprint.pprint(review2['reviews'][1]['text'])
+        pprint.pprint(review2['reviews'][2]['rating'])
+        pprint.pprint(review2['reviews'][2]['text'])
         pprint.pprint(response2['hours'])
         print('')
         print(response3['name'])
         print(response3['phone'])
         pprint.pprint(response3['location']['display_address'])
         print(str(response3['rating']) + ' stars')
+        review3 = get_review(API_KEY, businesses[2]['id'])
+        pprint.pprint(review3['reviews'][0]['rating'])
+        pprint.pprint(review3['reviews'][0]['text'])
+        pprint.pprint(review3['reviews'][1]['rating'])
+        pprint.pprint(review3['reviews'][1]['text'])
+        pprint.pprint(review3['reviews'][2]['rating'])
+        pprint.pprint(review3['reviews'][2]['text'])
         pprint.pprint(response3['hours'])
 
 
@@ -138,7 +178,7 @@ def ask_for_emoji():
         emoji_input = str(sentence)
         #gets text of emoji
         text = UNICODE_EMOJI[emoji_input]
-        #saves text without colons
+        #saves text without colons aka search term
         TERM = text[1:len(text)-1]
         get_location(TERM)
              
