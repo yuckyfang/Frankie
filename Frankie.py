@@ -137,12 +137,6 @@ def query_api(term,latitude, longitude, location=None):
         pprint.pprint(review3['reviews'][2]['text'])
         pprint.pprint(response3['hours'])
 
-
-#         pprint.pprint(response, indent=2)
-#         print('')
-#         pprint.pprint(response2, indent=2)
-#         print('')
-#         pprint.pprint(response3, indent=2)
     except HTTPError as error:
         sys.exit(
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(
